@@ -225,4 +225,31 @@ impl Solution {
 
         res.into_iter().flat_map(|x| {x.into_iter()}).collect()
     }
+
+    pub fn minimum_total(triangle: Vec<Vec<i32>>) -> i32 {
+        let n = triangle.len();
+        let mut dp: Vec<i32> = Vec::new();
+
+        dp[0] = triangle[0][0];
+
+        for i in 1..n {
+            let m = triangle[i].len();
+
+            dp[i] = dp[i - 1] + triangle[i][m - 1];
+
+            for j in (1..=m - 2).rev() {
+                dp[j] = dp[j].min(dp[j - 1]) + triangle[i][j];
+            }
+
+            dp[0] = dp[0] + triangle[i][0];
+        }
+
+        let mut min_path_sum = dp[0];
+
+        for i in 1..n {
+            min_path_sum = min_path_sum.min(dp[i]);
+        }
+
+        min_path_sum
+    }
 }
